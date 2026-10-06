@@ -11,8 +11,10 @@ import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.MatricNumber;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.TutorialGroup;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -63,6 +65,26 @@ public class ParserUtil {
             throw new ParseException(Phone.MESSAGE_CONSTRAINTS);
         }
         return new Phone(trimmedPhone);
+    }
+
+    /** Parses a matriculation number. */
+    public static MatricNumber parseMatricNumber(String matricNumber) throws ParseException {
+        requireNonNull(matricNumber);
+        String trimmedMatricNumber = matricNumber.trim();
+        if (!MatricNumber.isValidMatricNumber(trimmedMatricNumber)) {
+            throw new ParseException(MatricNumber.MESSAGE_CONSTRAINTS);
+        }
+        return new MatricNumber(trimmedMatricNumber);
+    }
+
+    /** Parses a tutorial group. */
+    public static TutorialGroup parseTutorialGroup(String tutorialGroup) throws ParseException {
+        requireNonNull(tutorialGroup);
+        String trimmedTutorialGroup = tutorialGroup.trim();
+        if (!TutorialGroup.isValidTutorialGroup(trimmedTutorialGroup)) {
+            throw new ParseException(TutorialGroup.MESSAGE_CONSTRAINTS);
+        }
+        return new TutorialGroup(trimmedTutorialGroup);
     }
 
     /**

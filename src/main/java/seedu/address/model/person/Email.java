@@ -33,6 +33,11 @@ public class Email {
 
     public final String value;
 
+    private Email(String email, boolean skipValidation) {
+        requireNonNull(email);
+        value = email;
+    }
+
     /**
      * Constructs an {@code Email}.
      *
@@ -42,6 +47,11 @@ public class Email {
         requireNonNull(email);
         checkArgument(isValidEmail(email), MESSAGE_CONSTRAINTS);
         value = email;
+    }
+
+    /** Returns the empty email value used when a student does not provide an email address. */
+    public static Email empty() {
+        return new Email("", true);
     }
 
     /**
