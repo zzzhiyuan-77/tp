@@ -31,7 +31,7 @@ TutorLink is a **desktop application for managing students' contact details, opt
 
    * `list` : Lists all contacts.
 
-   * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to TutorLink.
+   * `add n/Alice Tan m/A0123456X g/T01` : Adds student `Alice Tan` to TutorLink.
 
    * `delete 3` : Deletes the 3rd contact shown in the current list.
 
@@ -76,9 +76,22 @@ Shows a message explaining how to access the help page.
 Format: `help`
 
 
-### Adding a person: `add`
+### Adding a student: `add`
 
-Adds a person to the contact list.
+Adds a student to the roster.
+
+Format: `add n/NAME m/MATRIC_NUMBER g/TUTORIAL_GROUP [e/EMAIL]`
+
+* `n/NAME`, `m/MATRIC_NUMBER`, and `g/TUTORIAL_GROUP` are required.
+* `e/EMAIL` is optional.
+* Matriculation numbers are case-insensitive for duplicate detection.
+* Invalid input or a duplicate matriculation number leaves the roster unchanged.
+
+Examples:
+* `add n/Alice Tan m/A0123456X g/T01`
+* `add n/Bob Lim m/A0654321Y g/T02 e/bob@example.com`
+
+The legacy person format remains supported for existing data:
 
 Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]... `
 
@@ -195,7 +208,7 @@ _Details coming soon ..._
 
 Action     | Format, Examples
 -----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-**Add**    | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]... ` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
+**Add**    | `add n/NAME m/MATRIC_NUMBER g/TUTORIAL_GROUP [e/EMAIL]` <br> e.g., `add n/James Ho m/A0123456X g/T01 e/jamesho@example.com`
 **Clear**  | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]... `<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
