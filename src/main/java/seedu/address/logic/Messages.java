@@ -36,14 +36,23 @@ public class Messages {
      */
     public static String format(Person person) {
         final StringBuilder builder = new StringBuilder();
-        builder.append(person.getName())
-                .append("; Phone: ")
-                .append(person.getPhone())
-                .append("; Email: ")
-                .append(person.getEmail())
-                .append("; Address: ")
-                .append(person.getAddress())
-                .append("; Tags: ");
+        builder.append(person.getName());
+        if (person.isStudent()) {
+            builder.append("; Matriculation number: ")
+                    .append(person.getMatricNumber())
+                    .append("; Tutorial group: ")
+                    .append(person.getTutorialGroup())
+                    .append("; Email: ")
+                    .append(person.getEmail());
+        } else {
+            builder.append("; Phone: ")
+                    .append(person.getPhone())
+                    .append("; Email: ")
+                    .append(person.getEmail())
+                    .append("; Address: ")
+                    .append(person.getAddress());
+        }
+        builder.append("; Tags: ");
         person.getTags().forEach(builder::append);
         return builder.toString();
     }

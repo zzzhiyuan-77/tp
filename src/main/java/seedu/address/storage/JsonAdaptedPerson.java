@@ -12,9 +12,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.MatricNumber;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.TutorialGroup;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -28,6 +30,8 @@ class JsonAdaptedPerson {
     private final String phone;
     private final String email;
     private final String address;
+    private final String matricNumber;
+    private final String tutorialGroup;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
 
     /**
@@ -36,14 +40,24 @@ class JsonAdaptedPerson {
     @JsonCreator
     public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
             @JsonProperty("email") String email, @JsonProperty("address") String address,
-            @JsonProperty("tags") List<JsonAdaptedTag> tags) {
+            @JsonProperty("tags") List<JsonAdaptedTag> tags,
+            @JsonProperty("matricNumber") String matricNumber,
+            @JsonProperty("tutorialGroup") String tutorialGroup) {
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
+        this.matricNumber = matricNumber == null ? "" : matricNumber;
+        this.tutorialGroup = tutorialGroup == null ? "" : tutorialGroup;
         if (tags != null) {
             this.tags.addAll(tags);
         }
+    }
+
+    /** Constructs an adapted person without student fields for compatibility with existing callers and data. */
+    public JsonAdaptedPerson(String name, String phone, String email, String address,
+            List<JsonAdaptedTag> tags) {
+        this(name, phone, email, address, tags, "", "");
     }
 
     /**
@@ -54,6 +68,8 @@ class JsonAdaptedPerson {
         phone = source.getPhone().value;
         email = source.getEmail().value;
         address = source.getAddress().value;
+        matricNumber = source.getMatricNumber().value;
+        tutorialGroup = source.getTutorialGroup().value;
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
@@ -89,10 +105,10 @@ class JsonAdaptedPerson {
         if (email == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Email.class.getSimpleName()));
         }
-        if (!Email.isValidEmail(email)) {
+        if (!email.isEmpty() && !Email.isValidEmail(email)) {
             throw new IllegalValueException(Email.MESSAGE_CONSTRAINTS);
         }
-        final Email modelEmail = new Email(email);
+        final Email modelEmail = email.isEmpty() ? Email.empty() : new Email(email);
 
         if (address == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Address.class.getSimpleName()));
@@ -103,6 +119,16 @@ class JsonAdaptedPerson {
         final Address modelAddress = new Address(address);
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
+        if (!matricNumber.isEmpty() || !tutorialGroup.isEmpty()) {
+            if (matricNumber.isEmpty() || !MatricNumber.isValidMatricNumber(matricNumber)) {
+                throw new IllegalValueException(MatricNumber.MESSAGE_CONSTRAINTS);
+            }
+            if (tutorialGroup.isEmpty() || !TutorialGroup.isValidTutorialGroup(tutorialGroup)) {
+                throw new IllegalValueException(TutorialGroup.MESSAGE_CONSTRAINTS);
+            }
+            return new Person(modelName, new MatricNumber(matricNumber), new TutorialGroup(tutorialGroup),
+                    modelEmail, modelTags);
+        }
         return new Person(modelName, modelPhone, modelEmail, modelAddress, modelTags);
     }
 
